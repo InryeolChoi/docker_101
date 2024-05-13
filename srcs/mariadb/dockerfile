@@ -1,0 +1,14 @@
+# 데비안 가져오기
+FROM debian:bullseye
+
+# apt 업데이트 및 MariaDB 설치
+RUN apt-get update && apt-get upgrade -y
+RUN apt-get install mariadb-server -y
+
+# 복사하기
+COPY ./50-server.cnf /etc/mysql/mariadb.conf.d/
+EXPOSE 3306
+
+# 쉘 스크립트 실행
+COPY ./script.sh /
+ENTRYPOINT ["./script.sh"]

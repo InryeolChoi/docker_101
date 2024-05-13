@@ -1,0 +1,15 @@
+# 데비안 가져오기
+FROM debian:bullseye
+
+RUN apt-get update -y && apt-get upgrade -y
+
+# php
+RUN apt-get install php7.4-fpm php7.4-mysql -y
+
+RUN apt-get install mariadb-client -y
+RUN apt-get install curl -y
+
+COPY ./script.sh /
+CMD [ "./script.sh" ]
+
+EXPOSE 9000

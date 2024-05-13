@@ -1,0 +1,23 @@
+# 데비안 가져오기
+FROM debian:bullseye
+
+# apt 업데이트 및 nginx, openssl 설치
+RUN apt -y update && apt -y install nginx && apt -y install openssl
+
+# openssl 설정하기
+RUN mkdir /etc/nginx/ssl
+RUN openssl req \
+	-x509 -nodes -days 365 \
+    -newkey rsa:2048 \
+    -keyout /etc/nginx/ssl/my_ssl.key \
+    -out /etc/nginx/ssl/my_ssl.crt \
+	-subj "/C=KO/ST=Seoul/L=Gaepo/O=42Seoul/OU=inchoi/CN=$DOMAIN_NAME"
+
+# conf 파일 복사
+COPY ./nginx.conf /etc/nginx/sites-enabled/default
+
+# port 공개
+EXPOSE 443
+
+# nginx 시작
+CMD ["nginx", "-g", "daemon off;"]
